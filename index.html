@@ -1,0 +1,39 @@
+<div class="container">
+    <h1>CUDA-Powered Predictive Analytics Dashboard</h1>
+    <p>Enter your data below to see a prediction:</p>
+    <div class="input-group">
+        <label for="inputSales">Monthly Sales ($):</label>
+        <input type="number" id="inputSales" placeholder="Enter sales amount" required>
+    </div>
+    <div class="input-group">
+        <label for="inputCustomers">Number of Customers:</label>
+        <input type="number" id="inputCustomers" placeholder="Enter number of customers" required>
+    </div>
+    <div id="loading" class="loading hidden">Processing with CUDA...</div>
+    <div id="result" class="result"></div>
+</div>
+
+<script src="src/predictive.js"></script>
+<script>
+    const model = new PredictiveModel();
+    
+    document.getElementById('predictBtn').addEventListener('click', async () => {
+        const sales = parseFloat(document.getElementById('inputSales').value);
+        const customers = parseFloat(document.getElementById('inputCustomers').value);
+        
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+        
+        loading.classList.remove('hidden');
+        
+        try {
+            const prediction = await model.predict(sales, customers);
+            result.textContent = `Predicted Value: $${prediction.toFixed(2)}`;
+        } catch (error) {
+            result.textContent = `Error: ${error.message}`;
+        } finally {
+            loading.classList.add('hidden');
+        }
+    });
+</script>
+ 
